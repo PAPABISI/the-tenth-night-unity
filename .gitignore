@@ -1,0 +1,103 @@
+# =========================
+# Unity generated folders
+# =========================
+[Ll]ibrary/
+[Tt]emp/
+[Oo]bj/
+[Bb]uild/
+[Bb]uilds/
+[Ll]ogs/
+UserSettings/
+MemoryCaptures/
+Recordings/
+
+# =========================
+# Unity cache / auto files
+# =========================
+Assets/AssetStoreTools*
+Assets/Plugins/Editor/JetBrains*
+*.pidb
+*.booproj
+*.svd
+*.pdb
+*.mdb
+*.opendb
+*.VC.db
+
+# Unity3D generated meta for crash reports
+sysinfo.txt
+
+# =========================
+# IDE / Editor
+# =========================
+.vs/
+.vscode/
+.idea/
+*.csproj
+*.sln
+*.suo
+*.user
+*.userprefs
+*.unityproj
+*.tmp
+*.db
+*.pidb.meta
+*.pdb.meta
+*.mdb.meta
+
+# Rider
+.idea/
+
+# VSCode
+.history/
+
+# =========================
+# OS files
+# =========================
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# =========================
+# Packages lock (recommended keep)
+# =========================
+# Keep this tracked for reproducible dependencies:
+# Packages/packages-lock.json
+
+# =========================
+# Addressables / bundles (if generated locally)
+# =========================
+ServerData/
+*.bundle
+*.unitypackage
+
+# =========================
+# IL2CPP / build artifacts
+# =========================
+*.apk
+*.aab
+*.ipa
+*.app
+*.exe
+*.dll
+*.so
+*.dylib
+
+# =========================
+# Test / coverage output
+# =========================
+TestResults/
+coverage/
+CodeCoverage/
+
+# =========================
+# Dotnet / NuGet
+# =========================
+.nuget/
+*.nupkg
+
+# =========================
+# Uncomment if you use local env files
+# =========================
+# .env
+# .env.*
