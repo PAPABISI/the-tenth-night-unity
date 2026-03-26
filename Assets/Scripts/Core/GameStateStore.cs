@@ -10,7 +10,7 @@ public class GameStateStore : MonoBehaviour
     public StateResponse LatestState;
 
     [Header("Debug")]
-    public bool autoSetLocalPlayerIdOnStart = true;
+    public bool autoSetLocalPlayerIdOnStart = false;
     public string fallbackLocalPlayerId = "11111111-1111-1111-1111-111111111111";
 
     private void Awake()

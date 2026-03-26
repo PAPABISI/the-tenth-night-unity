@@ -15,7 +15,7 @@ public class NightIntentPanel : MonoBehaviour
     public Button btnNotSteal;        // “不偷”
 
     [Header("Hotkey")]
-    public KeyCode openKey = KeyCode.E;
+    public KeyCode openKey = KeyCode.Q;
 
     private bool _submittedThisNight = false;
     private int _lastRound = -1;

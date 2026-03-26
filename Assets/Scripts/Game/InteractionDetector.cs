@@ -1,5 +1,6 @@
 using UnityEngine;
 using TMPro;
+using System.Linq;
 
 public class InteractionDetector : MonoBehaviour
 {
@@ -14,6 +15,7 @@ public class InteractionDetector : MonoBehaviour
     public float playerRange = 1.5f;
     public LayerMask chestLayer;
     public LayerMask playerLayer;
+    public UiToast toast;
 
     [Header("Draw")]
     public bool defaultIsRedChest = false;
@@ -22,48 +24,52 @@ public class InteractionDetector : MonoBehaviour
     {
         if (localPlayer == null) return;
 
-        bool nearChest = Physics2D.OverlapCircle(localPlayer.position, chestRange, chestLayer);
-        Collider2D nearPlayer = Physics2D.OverlapCircle(localPlayer.position, playerRange, playerLayer);
+        var nearChest = FindNearest(localPlayer.position, chestRange, chestLayer);
+        var nearPlayer = FindNearest(localPlayer.position, playerRange, playerLayer);
+        var phase = store?.LatestState?.phase;
 
-        // 提示文案
         if (promptText != null)
         {
-            if (nearChest) promptText.text = "[F] Open Chest";
-            else if (nearPlayer != null) promptText.text = "[E] Interact";
+            if (nearChest != null && phase == "DayExploration") promptText.text = "[F] Open Chest";
+            else if (nearPlayer != null) promptText.text = "[E] Interact Player";
             else promptText.text = "";
         }
 
-        // F 开箱抽卡
-        if (Input.GetKeyDown(KeyCode.F))
+        if (Input.GetKeyDown(KeyCode.F) && nearChest != null)
         {
-            TryDrawCard(defaultIsRedChest);
+            if (phase != "DayExploration")
+            {
+                ShowToast("You can draw only in DayExploration.");
+            }
+            else
+            {
+                controller.DrawCard(defaultIsRedChest);
+                ShowToast(defaultIsRedChest ? "Draw from red chest" : "Draw from white chest");
+            }
         }
 
-        // E 互动（当前先做日志占位）
         if (nearPlayer != null && Input.GetKeyDown(KeyCode.E))
         {
-            Debug.Log("[Interact] E pressed near player. (voice/private chat hook point)");
+            var targetName = nearPlayer.name;
+            ShowToast($"Interact with {targetName}");
+            Debug.Log($"[Interact] E pressed near player: {targetName}");
         }
     }
 
-    private void TryDrawCard(bool isRedChest)
+    private Collider2D FindNearest(Vector2 origin, float range, LayerMask mask)
     {
-        if (string.IsNullOrEmpty(store.RoomId) || string.IsNullOrEmpty(store.LocalPlayerId))
-        {
-            Debug.LogWarning("[Draw] roomId/localPlayerId missing.");
-            return;
-        }
+        var hits = Physics2D.OverlapCircleAll(origin, range, mask);
+        if (hits == null || hits.Length == 0) return null;
 
-        var body = $"{{\"userId\":\"{store.LocalPlayerId}\",\"isRedChest\":{(isRedChest ? "true" : "false")}}}";
-        StartCoroutine(controller.api.PostJson($"/room/{store.RoomId}/action/draw", body,
-            onOk: json =>
-            {
-                Debug.Log("[Draw] OK: " + json);
-            },
-            onErr: err =>
-            {
-                Debug.LogError("[Draw] " + err);
-            }));
+        return hits
+            .OrderBy(h => Vector2.Distance(origin, h.transform.position))
+            .FirstOrDefault();
+    }
+
+    private void ShowToast(string msg)
+    {
+        if (toast != null)
+            toast.Show(msg, 1.2f);
     }
 
     private void OnDrawGizmosSelected()

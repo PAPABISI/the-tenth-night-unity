@@ -85,10 +85,11 @@ public class CardHandPanel : MonoBehaviour
     {
         return t switch
         {
-            1 => "Attack",
-            2 => "Heal",
-            3 => "Poison",
-            4 => "Shield",
+            0 => "GunShot",
+            1 => "Poison",
+            2 => "Antidote",
+            3 => "BulletProof",
+            4 => "Bandage",
             _ => $"Card-{t}"
         };
     }
